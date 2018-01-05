@@ -20,11 +20,21 @@ import (
 const agrometURL = "http://agromet.inia.cl/estaciones.php"
 
 func main() {
-	var stationName string
+	var stationName, from, to string
 	flag.StringVar(&stationName, "station", "", "station code name")
+	flag.StringVar(&from, "from", "", "initial date (dd-MM-yyyy)")
+	flag.StringVar(&to, "to", "", "final date (dd-MM-yyyy)")
 	flag.Parse()
 
-	data, err := stationData(stationName)
+	fromDate, err := time.Parse("02-01-2006", from)
+	if err != nil {
+		log.Fatal(err)
+	}
+	toDate, err := time.Parse("02-01-2006", to)
+	if err != nil {
+		log.Fatal(err)
+	}
+	data, err := stationData(stationName, fromDate, toDate)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,15 +87,15 @@ func saveMeasurements(file string, values []Measurements) error {
 	return nil
 }
 
-func stationData(station string) (io.ReadCloser, error) {
+func stationData(station string, from, to time.Time) (io.ReadCloser, error) {
 	values := make(url.Values)
 	values.Set("estaciones[]", station)
 	values.Add("variables[]", "2007-variable")
 	values.Add("variables[]", "2002-variable")
 	values.Add("variables[]", "2003-variable")
 	values.Add("intervalos", "hour")
-	values.Add("desde", "02-01-2018")
-	values.Add("hasta", "03-01-2018")
+	values.Add("desde", from.Format("02-01-2006"))
+	values.Add("hasta", to.Format("02-01-2006"))
 	values.Add("desde_meses", "01")
 	values.Add("desde_anos", "2017")
 	values.Add("hasta_meses", "12")
