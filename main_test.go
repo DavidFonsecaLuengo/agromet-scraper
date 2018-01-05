@@ -9,7 +9,7 @@ import (
 )
 
 func TestExtractMeasurements(t *testing.T) {
-	f, err := os.Open("Agromet _ Estaciones.html")
+	f, err := os.Open("testdata/Agromet _ Estaciones.html")
 	if err != nil {
 		t.Fatal(err)
 	}
