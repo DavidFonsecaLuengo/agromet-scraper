@@ -68,3 +68,7 @@ agromet-scraper.iml
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
+agromet-scraper
+
+# output files
+stations.json
