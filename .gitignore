@@ -71,4 +71,4 @@ agromet-scraper.iml
 agromet-scraper
 
 # output files
-stations.json
+*.json

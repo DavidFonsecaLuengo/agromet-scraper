@@ -21,6 +21,24 @@ type Station struct {
 	Latitude  float64 `json:"altitude"`
 }
 
+func loadStations(file string) ([]Station, error) {
+	var currentStations []Station
+	j, err := os.Open(file)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return currentStations, nil
+		}
+		return nil, err
+	}
+	defer j.Close()
+	err = json.NewDecoder(j).Decode(&currentStations)
+	if err != nil {
+		return nil, err
+	}
+	return currentStations, nil
+
+}
+
 func updateStations(file string) error {
 	resp, err := http.Get(agrometURL)
 	if err != nil {
