@@ -33,6 +33,31 @@ func TestExtractMeasurements(t *testing.T) {
 	assert.EqualValues(t, 10.4, v[35].WindVelocity)
 }
 
+func TestExtractMeasurementsNoValues(t *testing.T) {
+	f, err := os.Open("testdata/gaby-ranquilco-no-values_html")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+
+	v, err := extractMeasurements(f)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Len(t, v, 2)
+	// first row
+	assert.Equal(t, time.Date(2018, 1, 13, 0, 0, 0, 0, time.UTC), v[0].Date)
+	assert.Zero(t, v[0].Temperature)
+	assert.Zero(t, v[0].Humidity)
+	assert.Zero(t, v[0].WindVelocity)
+	// last row
+	assert.Equal(t, time.Date(2018, 1, 14, 0, 0, 0, 0, time.UTC), v[1].Date)
+	assert.Zero(t, v[1].Temperature)
+	assert.Zero(t, v[1].Humidity)
+	assert.Zero(t, v[1].WindVelocity)
+}
+
 func TestMergeMeasurementsNilM1(t *testing.T) {
 	now := time.Now()
 	m := mergeMeasurements(nil, []Measurements{{

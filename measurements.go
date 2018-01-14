@@ -89,26 +89,26 @@ func extractMeasurements(r io.Reader) ([]Measurements, error) {
 		case 1:
 			date, err := time.Parse("02-01-2006 15:04", node.Text())
 			if err != nil {
-				log.Print(err)
+				date, err = time.Parse("02-01-2006", node.Text())
+				if err != nil {
+					log.Print(err)
+				}
 			}
 			currentValue.Date = date.UTC()
 		case 2:
-			fixedSz := strings.Replace(node.Text(), ",", ".", 1)
-			temp, err := strconv.ParseFloat(fixedSz, 64)
+			temp, err := valueToFloat(node.Text())
 			if err != nil {
 				log.Print(err)
 			}
 			currentValue.Temperature = temp
 		case 3:
-			fixedSz := strings.Replace(node.Text(), ",", ".", 1)
-			hum, err := strconv.ParseFloat(fixedSz, 64)
+			hum, err := valueToFloat(node.Text())
 			if err != nil {
 				log.Print(err)
 			}
 			currentValue.Humidity = hum
 		case 4:
-			fixedSz := strings.Replace(node.Text(), ",", ".", 1)
-			windVel, err := strconv.ParseFloat(fixedSz, 64)
+			windVel, err := valueToFloat(node.Text())
 			if err != nil {
 				log.Print(err)
 			}
@@ -118,6 +118,14 @@ func extractMeasurements(r io.Reader) ([]Measurements, error) {
 		i++
 	})
 	return values, nil
+}
+
+func valueToFloat(value string) (float64, error) {
+	if value == "-" {
+		return 0, nil
+	}
+	fixedSz := strings.Replace(value, ",", ".", 1)
+	return strconv.ParseFloat(fixedSz, 64)
 }
 
 func mergeMeasurements(m1, m2 []Measurements) []Measurements {
