@@ -18,7 +18,7 @@ type Station struct {
 	ID        string  `json:"id"`
 	Name      string  `json:"name"`
 	Longitude float64 `json:"longitude"`
-	Latitude  float64 `json:"altitude"`
+	Latitude  float64 `json:"latitude"`
 }
 
 func loadStations(file string) ([]Station, error) {
