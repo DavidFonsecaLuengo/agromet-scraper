@@ -1,4 +1,4 @@
-# Agromet Scraper
+# Agromet Scraper [![Build Status](https://travis-ci.org/jriquelme/agromet-scraper.svg?branch=master)](https://travis-ci.org/jriquelme/agromet-scraper)
 
 Scraper para extraer datos desde http://agromet.inia.cl/estaciones.php
 
